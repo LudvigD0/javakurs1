@@ -31,16 +31,18 @@ public class Lab2 {
 
         // lösning för del 3
         System.out.println("Del 3:");
+        
         int sumOfEven = 0;
         for (int i = 0; i < a.length; i++) {
-            if (a[i] % 2 == 0) {
+            if (a[i] % 2 == 0)
                 sumOfEven = sumOfEven + a[i];
-            }
         }
         for (int i = 0; i < a.length; i++) {
             if (sumOfEven < a[i])
                 System.out.println(a[i]);
         }
+
+
 
         // frivilligt: lösning för del 4
         System.out.println("Del 4:");
