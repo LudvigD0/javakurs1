@@ -44,8 +44,6 @@ class RatNumTest3 {
         String str = new String("TEST");
 
         System.out.println();
-        System.out.println(">>>> Test av equals: Vi har kanske inte gått igenom equals ännu ");
-        System.out.println("så du behöver inte klara dessa tester än");
         //System.out.println("equals test 1 ");
         if (x.equals(y) || !y.equals(z) || !x.equals(w)) {
             System.out.println("RatNumTest3: FEL 1 i equals!!");
