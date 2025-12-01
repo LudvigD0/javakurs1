@@ -37,18 +37,7 @@ public class RatNum {
      * @param b The denominator
       */
     public RatNum (int a, int b) {
-        if (b == 0)
-            throw new NumberFormatException("Denominator = 0");
-
-        int gcd = gcd(a,b);
-
-        this.numerator = a / gcd;
-        this.denominator = b / gcd;
-
-        if (b < 0) {
-            this.numerator *= -1;
-            this.denominator *= -1;
-        }
+        this(BigInteger.valueOf(a), BigInteger.valueOf(b));
     }
     
     /**
@@ -62,7 +51,24 @@ public class RatNum {
 
 
     private RatNum (BigInteger n, BigInteger d) {
+        if (d == BigInteger.valueOf(0))
+            throw new NumberFormatException("Denominator = 0");
+
+        /* int gcd = gcd(n,d); */
+        BigInteger gcd = n.gcd(d);
+
+        this.numerator = n.divide(gcd);
+        this.denominator = d.divide(gcd);        
         
+        if (d.compareTo(BigInteger.valueOf(0)) == -1) {
+            this.numerator = this.numerator.negate();
+            this.denominator = this.denominator.negate();
+        }
+
+        /*  if (d < 0) {
+            this.numerator *= -1;
+            this.denominator *= -1;
+        } */
     }
 
     /**
@@ -79,6 +85,14 @@ public class RatNum {
       */
     public int getDenominator() {
         return numerator.intValue();
+    }
+
+    /**
+     * Integer part extraction for rational numbers.
+     * @return the integer part of this rational number
+     */    
+    public int intPart() {
+        return this.numerator.divide(this.denominator).intValue();
     }
     
     /**
@@ -110,10 +124,10 @@ public class RatNum {
      * @return Returns true or false
       */
     public boolean lessThan(RatNum otherR) {
-        int newOtherRnum = (otherR.numerator * this.denominator);
-        int newThisNum = (this.numerator * otherR.denominator);
+        BigInteger newOtherRnum = (otherR.numerator.multiply(this.denominator));
+        BigInteger newThisNum = (this.numerator.multiply(otherR.denominator));
 
-        if (newThisNum < newOtherRnum) {
+        if (newThisNum.compareTo(newOtherRnum) == -1) {
             return true;
         }
 
@@ -126,8 +140,8 @@ public class RatNum {
      * @return Returns the added rational number
       */
     public RatNum add(RatNum otherR) {
-        int num = (otherR.numerator * this.denominator) + (this.numerator * otherR.denominator);
-        int den = otherR.denominator * this.denominator;
+        BigInteger num = (otherR.numerator.multiply(this.denominator)).add(this.numerator.multiply(otherR.denominator));
+        BigInteger den = otherR.denominator.multiply(this.denominator);
 
         return new RatNum(num, den);
     }
@@ -138,8 +152,8 @@ public class RatNum {
      * @return Returns the subtracted rational number
       */
     public RatNum sub(RatNum otherR) {
-        int num = (this.numerator * otherR.denominator) - (otherR.numerator * this.denominator);
-        int den = otherR.denominator * this.denominator;
+        BigInteger num = (this.numerator.multiply(otherR.denominator)).subtract(otherR.numerator.multiply(this.denominator));
+        BigInteger den = otherR.denominator.multiply(this.denominator);
         
         return new RatNum(num,den);
     }
@@ -150,8 +164,8 @@ public class RatNum {
      * @return Returns the multiplied rational number
       */
     public RatNum mul(RatNum otherR) {
-        int den = otherR.denominator * this.denominator;
-        int num = otherR.numerator * this.numerator;
+        BigInteger den = otherR.denominator.multiply(this.denominator);
+        BigInteger num = otherR.numerator.multiply(this.numerator);
 
         return new RatNum(num, den);
     }
@@ -162,8 +176,8 @@ public class RatNum {
      * @return Returns the divided rational number
       */
     public RatNum div(RatNum otherR) {
-        int num = this.numerator * otherR.denominator;
-        int den = otherR.numerator * this.denominator;
+        BigInteger num = this.numerator.multiply(otherR.denominator);
+        BigInteger den = otherR.numerator.multiply(this.denominator);
 
         return new RatNum(num, den);
     }
