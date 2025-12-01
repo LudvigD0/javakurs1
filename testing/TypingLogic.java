@@ -17,8 +17,8 @@ class TypingLogic {
     };
 
     private final ArrayList<Character> typedCharacters = new ArrayList<>();
-    private final ArrayList<Boolean> progress = new ArrayList<>();
-    private final ArrayList<Character> toBeTypedList = initializeWords();
+    public final ArrayList<Boolean> progress = new ArrayList<>();
+    public final ArrayList<Character> toBeTypedList = initializeWords();
 
 
     public void handleKeyPressed(KeyEvent e) {

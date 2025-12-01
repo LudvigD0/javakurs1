@@ -9,6 +9,7 @@ import java.awt.Graphics;
 import java.awt.event.*;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
 
@@ -25,8 +26,8 @@ public class Game extends JFrame implements KeyListener {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.addKeyListener(this);
 
-        panel = new Gamepanel();
         logic = new TypingLogic();
+        panel = new Gamepanel(logic);
 
         this.add(panel);
 
@@ -66,9 +67,12 @@ class Gamepanel extends JPanel {
     double textPosX = 0;
     int fontSize = 40;
 
+    private final TypingLogic logic;
     private Font interFont;
 
-    public Gamepanel() {
+    public Gamepanel(TypingLogic logic) {
+        this.logic = logic;
+
         try {
             InputStream interSrc = getClass().getResourceAsStream("/fonts/Kanit-SemiBold.ttf");
 
@@ -103,6 +107,7 @@ class Gamepanel extends JPanel {
 
         g.setFont(interFont);
         Color[] colors = { light };
+        
         String text = "Hello world, looking amazing";
 
         
@@ -124,22 +129,33 @@ class Gamepanel extends JPanel {
             }
         }
 
+        for (int i = 0; i < logic.toBeTypedList.subList(0, 20).size(); i++) {
+            totalWidth += fm.charWidth(logic.toBeTypedList.get(i));
+
+        }
+
 
         int startX = (panelW - totalWidth) / 2;
         int baseLineY = (panelH - fontSize) / 2;
         int currentX = startX;
-        for (int i = 0; i < text.length(); i++) {
-            char c = text.charAt(i);
+        for (int i = 0; i < logic.toBeTypedList.subList(0, 20).size(); i++) {
+            char c = logic.toBeTypedList.get(i);
 
-            g.setColor(colors[i % colors.length]); 
+            if (!logic.progress.isEmpty() && logic.progress.get(i)) {
+                g.setColor(red); 
 
-//            int textWidth = g.getFontMetrics().stringWidth(text);
+            } else {
+                g.setColor(light);
+            }
+
+
       
             g.drawString(String.valueOf(c), currentX, baseLineY);
 
             // move X position based on the width of the character
             currentX += g.getFontMetrics().charWidth(c) + 2;
         }
+//            int textWidth = g.getFontMetrics().stringWidth(text);
 
 
 
